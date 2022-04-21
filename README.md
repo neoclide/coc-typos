@@ -32,9 +32,10 @@ nmap z= <Plug>(coc-typos-fix)
 ```
 
 File(s) specified by 'spellfile' option is loaded for known words when exists,
-use `zg` and `zug` to add and remove global known words.
+use `zg` and `zug` to add and remove global known words. Or use
+[\_typos.toml](https://github.com/crate-ci/typos#false-positives)
 
-Note: to make completion always shown, you may need use
+**Note**: to make completion always shown, you may need use
 `set completeopt=menuone,noselect` in your vimrc.
 
 ## Commands
