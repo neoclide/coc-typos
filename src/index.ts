@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, HighlightItem, window, workspace } from 'coc.nvim'
+import { commands, ExtensionContext, Range, HighlightItem, window, workspace, TextEdit } from 'coc.nvim'
 import Ignored from './ignored'
 import TyposBuffer, { NAMESPACE } from './item'
 
@@ -9,6 +9,11 @@ async function getHighlights(): Promise<HighlightItem[]> {
 
 function jumpTo(item: HighlightItem): void {
   workspace.nvim.call('cursor', [item.lnum + 1, item.colStart + 1], true)
+}
+
+function characterIndex(content: string, byteIndex: number): number {
+  let buf = Buffer.from(content, 'utf8')
+  return buf.slice(0, byteIndex).toString('utf8').length
 }
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -78,7 +83,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
       let [lnum, col] = await nvim.eval(`[line('.')-1,col('.')-1,&wrapscan]`) as [number, number]
       let typo = item.findTypo(lnum, col)
       if (!typo) return window.showWarningMessage('No bad spelled word found at cursor position')
-      nvim.call('coc#snippet#show_choices', [typo.lnum + 1, typo.colStart + 1, typo.word.length, typo.corrections], true)
+      let doc = workspace.getDocument(bufnr)
+      let n = await window.showMenuPicker(typo.corrections, { title: 'Pick word' })
+      if (n < 0) return
+      let content = doc.getline(typo.lnum)
+      let text = typo.corrections[n]
+      let range = Range.create(typo.lnum, characterIndex(content, typo.colStart), typo.lnum, characterIndex(content, typo.colStart + typo.word.length))
+      await doc.applyEdits([TextEdit.replace(range, text)])
     }, { sync: false }),
   )
 
