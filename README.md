@@ -4,6 +4,8 @@
 
 It checks typos with opened buffer automatically.
 
+![Typos screen shot](https://alfs.chigua.cn/dianyou/data/platform/default/20220422/Screen%20Shot%202022-04-22%20at%2001.55.23.png)
+
 ## Install
 
 Install typos by:
