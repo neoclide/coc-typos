@@ -1,0 +1,76 @@
+{
+  "name": "coc-typos",
+  "version": "0.0.1",
+  "description": "Typos integration with coc.nvim",
+  "author": "Qiming Zhao <chemzqm@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim",
+    "typos"
+  ],
+  "engines": {
+    "coc": "^0.0.80"
+  },
+  "bugs": {
+    "url": "https://github.com/neoclide/coc-typos/issues"
+  },
+  "homepage": "https://github.com/neoclide/coc-typos#readme",
+  "scripts": {
+    "lint": "eslint src --ext ts",
+    "clean": "rimraf lib",
+    "watch": "node esbuild.js --watch",
+    "build": "node esbuild.js",
+    "prepare": "node esbuild.js"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 120,
+    "semi": true
+  },
+  "devDependencies": {
+    "@types/debounce": "^1.2.1",
+    "@types/node": "^12.12.0",
+    "coc.nvim": "^0.0.81-next.23",
+    "debounce": "^1.2.1",
+    "esbuild": "^0.14.24",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.2"
+  },
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Typos configuration",
+      "properties": {
+        "typos.command": {
+          "type": "string",
+          "default": "typos",
+          "description": "Command used to invoke typos."
+        },
+        "typos.disabledFiletypes": {
+          "type": "array",
+          "default": [],
+          "description": "Filetypes that should by ignored by typos.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "typos.highlightGroup": {
+          "type": "string",
+          "default": "SpellBad",
+          "description": "Highlight group used for bad spelled text."
+        }
+      }
+    },
+    "commands": [
+      {
+        "title": "Force reload 'spellfile' for known words",
+        "command": "typos.reloadSpellfile"
+      }
+    ]
+  },
+  "dependencies": {}
+}
