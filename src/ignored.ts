@@ -17,15 +17,15 @@ export default class Ignored {
         for (let file of this.files) {
           this.watchFile(file)
         }
-        this.loadFiles()
+        this.loadFiles().then(() => {
+          this._onDidChange.fire()
+        })
       }
     })
   }
 
-  public loadFiles(): void {
-    for (let file of this.files) {
-      this.loadFile(file)
-    }
+  public async loadFiles(): Promise<void> {
+    await Promise.all(this.files.map(file => this.loadFile(file)))
   }
 
   private watchFile(filepath: string): void {
@@ -35,14 +35,17 @@ export default class Ignored {
     }))
   }
 
-  private loadFile(filepath: string, fireEvent = false): void {
-    if (!fs.existsSync(filepath)) return
-    fs.readFile(filepath, 'utf8', (err, data) => {
-      if (err) return
-      let words = data.trim().split(/\r?\n/)
-      this.ignoredWords.set(filepath, words)
-      this.output.appendLine(`[Info - ${now()}] Loaded ${words.length} words from spellfile ${filepath}`)
-      if (fireEvent) this._onDidChange.fire()
+  private loadFile(filepath: string, fireEvent = false): Promise<void> {
+    return new Promise(resolve => {
+      if (!fs.existsSync(filepath)) return resolve()
+      fs.readFile(filepath, 'utf8', (err, data) => {
+        if (err) return
+        let words = data.trim().split(/\r?\n/)
+        this.ignoredWords.set(filepath, words)
+        this.output.appendLine(`[Info - ${now()}] Loaded ${words.length} words from spellfile ${filepath}`)
+        if (fireEvent) this._onDidChange.fire()
+        resolve()
+      })
     })
   }
 
