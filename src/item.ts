@@ -1,6 +1,7 @@
+'use strict'
 import { Buffer, BufferSyncItem, CancellationTokenSource, Document, ExtendedHighlightItem, OutputChannel, workspace } from 'coc.nvim'
 import { inspect } from 'util'
-import { getTypos, now, TyposItem } from './util'
+import { getTyposBuffer, now, TyposItem } from './util'
 export const NAMESPACE = 'typos'
 
 export interface TyposConfig {
@@ -56,6 +57,7 @@ export default class TyposBuffer implements BufferSyncItem {
         end_incl: false
       })
     }
+    this.buffer.setVar('coc_typos_count', items.length)
     this.buffer.updateHighlights(NAMESPACE, items)
     workspace.nvim.redrawVim()
   }
@@ -76,7 +78,7 @@ export default class TyposBuffer implements BufferSyncItem {
     let cmd = this.config.command
     let tokenSource = this.tokenSource = new CancellationTokenSource()
     let token = tokenSource.token
-    getTypos(this.config.command, doc.textDocument.getText()).then(typos => {
+    getTyposBuffer(this.config.command, doc.textDocument.lines, token).then(typos => {
       if (token.isCancellationRequested) return
       this.typos = typos
       this.info(`${typos.length} typos found for ${doc.uri}.`)

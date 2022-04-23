@@ -39,13 +39,19 @@ use `zg` and `zug` to add and remove global known words. Or use
 
 ## Commands
 
-- `typos.reloadSpellfile` force reload 'spellfile' for known words.
+- `:CocCommand typos.reloadSpellfile` force reload 'spellfile' for known words.
+- `:CocList typos` show list of typos in current cwd (or workspace folder).
+
+## Variable
+
+- `b:coc_typos_count` types count of current buffer.
 
 ## Options
 
 - `typos.command`: Command used to invoke typos. default: `"typos"`
 - `typos.disabledFiletypes`: Filetypes that should by ignored by typos. default: `[]`
 - `typos.highlightGroup`: Highlight group used for bad spelled text. default: `"SpellBad"`
+- `typos.listTyposArguments`: Additional arguments of typos command used for typos list. default: `[]`
 
 ## Troubleshooting
 

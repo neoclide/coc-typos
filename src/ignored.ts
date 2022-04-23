@@ -1,3 +1,4 @@
+'use strict'
 import { Disposable, disposeAll, Emitter, Event, OutputChannel, workspace } from 'coc.nvim'
 import fs from 'fs'
 import { now, watchFile } from './util'
@@ -40,7 +41,7 @@ export default class Ignored {
       if (!fs.existsSync(filepath)) return resolve()
       fs.readFile(filepath, 'utf8', (err, data) => {
         if (err) return
-        let words = data.trim().split(/\r?\n/)
+        let words = data.trim().split(/\r?\n/).filter(s => !s.startsWith('#'))
         this.ignoredWords.set(filepath, words)
         this.output.appendLine(`[Info - ${now()}] Loaded ${words.length} words from spellfile ${filepath}`)
         if (fireEvent) this._onDidChange.fire()

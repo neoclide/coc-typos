@@ -1,6 +1,8 @@
-import { commands, ExtensionContext, Range, HighlightItem, window, workspace, TextEdit } from 'coc.nvim'
+'use strict'
+import { commands, ExtensionContext, listManager, Range, HighlightItem, window, workspace, TextEdit } from 'coc.nvim'
 import Ignored from './ignored'
 import TyposBuffer, { NAMESPACE } from './item'
+import TyposList from './list'
 
 async function getHighlights(): Promise<HighlightItem[]> {
   let buf = await workspace.nvim.buffer
@@ -91,6 +93,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
       let range = Range.create(typo.lnum, characterIndex(content, typo.colStart), typo.lnum, characterIndex(content, typo.colStart + typo.word.length))
       await doc.applyEdits([TextEdit.replace(range, text)])
     }, { sync: false }),
+  )
+
+  subscriptions.push(
+    listManager.registerList(new TyposList(nvim, ignored))
   )
 
   subscriptions.push(
