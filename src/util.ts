@@ -18,7 +18,7 @@ export function spawnCommand(cmd: string, args: string[], lines: ReadonlyArray<s
   const cp = spawn(cmd, args, { cwd: process.cwd(), serialization: 'advanced' })
   return new Promise((resolve, reject) => {
     let disposable = token.onCancellationRequested(() => {
-      cp.kill()
+      // cp.kill(os.constants.signals.SIGKILL)
       disposable.dispose()
       resolve(undefined)
     })
