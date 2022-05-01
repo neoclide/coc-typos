@@ -44,7 +44,7 @@ use `zg` and `zug` to add and remove global known words. Or use
 
 ## Variable
 
-- `b:coc_typos_count` types count of current buffer.
+- `b:coc_typos_count` typos count of current buffer.
 
 ## Options
 
