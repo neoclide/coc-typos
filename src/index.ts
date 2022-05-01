@@ -92,6 +92,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       let text = typo.corrections[n]
       let range = Range.create(typo.lnum, characterIndex(content, typo.colStart), typo.lnum, characterIndex(content, typo.colStart + typo.word.length))
       await doc.applyEdits([TextEdit.replace(range, text)])
+      await nvim.command(`silent! call repeat#set("\\<Plug>(coc-typos-fix)", -1)`)
     }, { sync: false }),
   )
 
