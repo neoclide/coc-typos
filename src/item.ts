@@ -42,6 +42,10 @@ export default class TyposBuffer implements BufferSyncItem {
     })
   }
 
+  public onTextChange(): void {
+    this.cancel()
+  }
+
   public addHighlights(): void {
     if (!this.typos) return
     let hlGroup = this.config.highlightGroup
