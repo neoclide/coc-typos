@@ -48,6 +48,7 @@ export default class TyposBuffer implements BufferSyncItem {
 
   public addHighlights(): void {
     if (!this.typos) return
+    let { nvim } = workspace
     let hlGroup = this.config.highlightGroup
     let items: ExtendedHighlightItem[] = []
     for (let o of this.typos) {
@@ -61,9 +62,10 @@ export default class TyposBuffer implements BufferSyncItem {
         end_incl: false
       })
     }
-    this.buffer.setVar('coc_typos_count', items.length)
+    nvim.pauseNotification()
+    this.buffer.setVar('coc_typos_count', items.length, true)
     this.buffer.updateHighlights(NAMESPACE, items)
-    workspace.nvim.redrawVim()
+    nvim.resumeNotification(true, true)
   }
 
   public findTypo(lnum: number, col: number): TyposItem | undefined {
