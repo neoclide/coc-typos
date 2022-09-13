@@ -64,10 +64,10 @@ export function parseLine(line: string): TyposItem | undefined {
   }
 }
 
-export function getTyposBuffer(cmd: string, lines: ReadonlyArray<string>, token: CancellationToken): Promise<ReadonlyArray<TyposItem>> {
+export function getTyposBuffer(cmd: string, args: string[], lines: ReadonlyArray<string>, token: CancellationToken): Promise<ReadonlyArray<TyposItem>> {
   let res: TyposItem[] = []
   return new Promise((resolve, reject) => {
-    spawnCommand(cmd, ['--format=json', '-'], lines, token, line => {
+    spawnCommand(cmd, [...args, '--format=json', '-'], lines, token, line => {
       let item = parseLine(line)
       if (item) res.push(item)
     }).then(() => {

@@ -30,6 +30,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     let config = workspace.getConfiguration('typos', doc.uri)
     return new TyposBuffer(doc, {
       command: config.get('command', 'typos'),
+      arguments: config.get('arguments', []),
       disabledFiletypes: config.get<string[]>('disabledFiletypes', []),
       highlightGroup: config.get('highlightGroup', 'SpellBad'),
     },

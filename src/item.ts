@@ -7,6 +7,7 @@ export const NAMESPACE = 'typos'
 export interface TyposConfig {
   command: string
   disabledFiletypes: string[]
+  arguments: string[]
   highlightGroup: string
 }
 
@@ -84,7 +85,7 @@ export default class TyposBuffer implements BufferSyncItem {
     let cmd = this.config.command
     let tokenSource = this.tokenSource = new CancellationTokenSource()
     let token = tokenSource.token
-    getTyposBuffer(this.config.command, doc.textDocument.lines, token).then(typos => {
+    getTyposBuffer(this.config.command, this.config.arguments, doc.textDocument.lines, token).then(typos => {
       if (token.isCancellationRequested) return
       this.typos = typos
       this.info(`${typos.length} typos found for ${doc.uri}.`)

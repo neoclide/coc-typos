@@ -50,6 +50,14 @@
           "default": "typos",
           "description": "Command used to invoke typos."
         },
+        "typos.arguments": {
+          "type": "array",
+          "default": [],
+          "description": "Additional arguments used to invoke typos",
+          "items": {
+            "type": "string"
+          }
+        },
         "typos.disabledFiletypes": {
           "type": "array",
           "default": [],
@@ -66,7 +74,7 @@
         "typos.listTyposArguments": {
           "type": "array",
           "default": [],
-          "description": "Additional arguments of typos command used on list.",
+          "description": "Additional arguments of typos command used on list, should not contains --color and --format.",
           "items": {
             "type": "string"
           }
