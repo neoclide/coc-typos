@@ -1,6 +1,6 @@
 {
   "name": "coc-typos",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Typos integration with coc.nvim",
   "author": "Qiming Zhao <chemzqm@gmail.com>",
   "license": "MIT",
