@@ -85,6 +85,10 @@
       {
         "title": "Force reload 'spellfile' for known words",
         "command": "typos.reloadSpellfile"
+      },
+      {
+        "title": "Add typo to 'spellfile'",
+        "command": "typos.addToSpellfile"
       }
     ]
   },

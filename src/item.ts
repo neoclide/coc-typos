@@ -1,7 +1,9 @@
 'use strict'
-import { Buffer, BufferSyncItem, CancellationTokenSource, Document, ExtendedHighlightItem, OutputChannel, workspace } from 'coc.nvim'
+import { Buffer, BufferSyncItem, CancellationTokenSource, window, Document, ExtendedHighlightItem, OutputChannel, workspace, DidChangeTextDocumentParams } from 'coc.nvim'
 import { inspect } from 'util'
+import path from 'path'
 import { getTyposBuffer, now, TyposItem } from './util'
+import fs from 'fs'
 export const NAMESPACE = 'typos'
 
 export interface TyposConfig {
@@ -15,7 +17,7 @@ export type CheckIgnored = (word: string) => boolean
 
 export default class TyposBuffer implements BufferSyncItem {
   private tokenSource: CancellationTokenSource | undefined
-  private typos: ReadonlyArray<TyposItem> | undefined
+  private typos: ReadonlyArray<TyposItem> = []
   constructor(
     private doc: Document,
     private config: TyposConfig,
@@ -36,11 +38,30 @@ export default class TyposBuffer implements BufferSyncItem {
     }
   }
 
-  public onChange(): void {
+  public async addToKnownWordAtCursor(): Promise<void> {
+    let [line, col] = await workspace.nvim.eval('[line(".")-1,col(".")-1]') as [number, number]
+    let item = this.typos.find(o => o.lnum == line && o.colStart <= col && o.colEnd >= col)
+    if (!item) return void window.showWarningMessage(`Typo not found at cursor position`)
+    let spellfile = await this.doc.buffer.getOption('spellfile') as string
+    if (spellfile) spellfile = workspace.expand(spellfile)
+    if (!spellfile) {
+      void window.showWarningMessage(`spellfile option not exists`)
+      return
+    }
+    if (!fs.existsSync(spellfile)) {
+      let res = await window.showPrompt(`Spellfile ${spellfile} not exists, create?`)
+      if (!res) return
+      let folder = path.dirname(spellfile)
+      fs.mkdirSync(folder, { recursive: true })
+      fs.writeFileSync(spellfile, '', 'utf8')
+    }
+    fs.appendFileSync(spellfile, `${item.word}\n`)
+  }
+
+  public onChange(e: DidChangeTextDocumentParams): void {
     if (this.config.disabledFiletypes.includes(this.doc.filetype)) return
-    process.nextTick(() => {
-      this.check()
-    })
+    if (e.contentChanges.length == 0) return
+    this.check()
   }
 
   public onTextChange(): void {
@@ -48,7 +69,6 @@ export default class TyposBuffer implements BufferSyncItem {
   }
 
   public addHighlights(): void {
-    if (!this.typos) return
     let { nvim } = workspace
     let hlGroup = this.config.highlightGroup
     let items: ExtendedHighlightItem[] = []
@@ -70,7 +90,6 @@ export default class TyposBuffer implements BufferSyncItem {
   }
 
   public findTypo(lnum: number, col: number): TyposItem | undefined {
-    if (!this.typos) return undefined
     return this.typos.find(o => o.lnum == lnum && o.colStart <= col && o.colEnd >= col)
   }
 
@@ -130,6 +149,5 @@ export default class TyposBuffer implements BufferSyncItem {
 
   public dispose() {
     this.cancel()
-    this.typos = undefined
   }
 }

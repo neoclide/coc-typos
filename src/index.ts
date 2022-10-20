@@ -105,6 +105,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand('typos.reloadSpellfile', () => {
       ignored.loadFiles()
       refreshAll()
+    }),
+    commands.registerCommand('typos.addToSpellfile', async () => {
+      let bufnr = await nvim.call('bufnr', ['%'])
+      let item = bufferSync.getItem(bufnr)
+      if (!item) return window.showWarningMessage(`Buffer not attached`)
+      await item.addToKnownWordAtCursor()
+      refreshAll()
     })
   )
 }

@@ -40,6 +40,8 @@ use `zg` and `zug` to add and remove global known words. Or use
 ## Commands
 
 - `:CocCommand typos.reloadSpellfile` force reload 'spellfile' for known words.
+- `:CocCommand typos.addToSpellfile` add bad word under cursor(the range
+  of bad spelled word) to 'spellfile'.
 - `:CocList typos` show list of typos in current cwd (or workspace folder).
 
 ## Variable
