@@ -1,6 +1,6 @@
 {
   "name": "coc-typos",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Typos integration with coc.nvim",
   "author": "Qiming Zhao <chemzqm@gmail.com>",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "typos"
   ],
   "engines": {
-    "coc": "^0.0.80"
+    "coc": "^0.0.82"
   },
   "bugs": {
     "url": "https://github.com/neoclide/coc-typos/issues"
