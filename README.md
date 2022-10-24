@@ -55,6 +55,13 @@ use `zg` and `zug` to add and remove global known words. Or use
 - `typos.highlightGroup`: Highlight group used for bad spelled text. default: `"SpellBad"`
 - `typos.listTyposArguments`: Additional arguments of typos command used for typos list. default: `[]`
 
+## CHANGELOG
+
+### v0.3.0
+
+- Pass tens of thousands lines to child process could be slow, validate for changed
+  lines only.
+
 ## Troubleshooting
 
 Use command `:CocCommand workspace.showOutput typos` to open output channel.
