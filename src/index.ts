@@ -89,9 +89,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
       let doc = workspace.getDocument(bufnr)
       let n = await window.showMenuPicker(typo.corrections, { title: 'Pick word' })
       if (n < 0) return
-      let content = doc.getline(typo.lnum)
+      let content = doc.getline(lnum)
       let text = typo.corrections[n]
-      let range = Range.create(typo.lnum, characterIndex(content, typo.colStart), typo.lnum, characterIndex(content, typo.colStart + typo.word.length))
+      let range = Range.create(lnum, characterIndex(content, typo.colStart), lnum, characterIndex(content, typo.colStart + typo.word.length))
       await doc.applyEdits([TextEdit.replace(range, text)])
       await nvim.command(`silent! call repeat#set("\\<Plug>(coc-typos-fix)", -1)`)
     }, { sync: false }),
