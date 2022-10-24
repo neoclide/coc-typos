@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@types/debounce/-/debounce-1.2.1.tgz#79b65710bc8b6d44094d286aecf38e44f9627852"
   integrity sha512-epMsEE85fi4lfmJUH/89/iV/LI+F5CvNIvmgs5g5jYFPfhO2S/ae8WSsLOKWdwtoaZw9Q2IhJ4tQ5tFCcS/4HA==
 
-"@types/node@^12.12.0":
-  version "12.20.48"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.48.tgz#55f70bd432b6515828c0298689776861b90ca4fa"
-  integrity sha512-4kxzqkrpwYtn6okJUcb2lfUu9ilnb3yhUOH6qX3nug8D2DupZ2drIkff2yJzYcNJVl3begnlcaBJ7tqiTTzjnQ==
+"@types/node@14.14":
+  version "14.14.45"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.45.tgz#ec2dfb5566ff814d061aef7e141575aedba245cf"
+  integrity sha512-DssMqTV9UnnoxDWu959sDLZzfvqCF0qDNRjaWeYSui9xkFe61kKo4l1TWNTQONpuXEm+gLMRvdlzvNHBamzmEw==
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -25,10 +25,10 @@ brace-expansion@^1.1.7:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
 
-coc.nvim@^0.0.81-next.24:
-  version "0.0.81-next.24"
-  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.81-next.24.tgz#81c6068416e0aee31d97d512e05706374288d4c4"
-  integrity sha512-wdpEnEhsWQp1YUKoRsYEz/vsEsKJGP+kgAu2uPal5yVZ5PbOG9KmQO4721LeZKKixbrtQkMz7jrq1israziA+Q==
+coc.nvim@^0.0.83-next.6:
+  version "0.0.83-next.6"
+  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.83-next.6.tgz#20a1a6e7225ff4d7fae967483f9625b053844fde"
+  integrity sha512-z8rygwRTccqD5vkpbHWcmWjPig0Qb3Gw5eC4I8/VhMhN0PY5PQ2nhUJaXQVaj4fX8R34gZRQp6W9rAXi2/xb8A==
 
 concat-map@0.0.1:
   version "0.0.1"

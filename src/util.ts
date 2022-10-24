@@ -8,6 +8,9 @@ import readline from 'readline'
 export interface TyposItem {
   type: string
   word: string
+  /**
+   * all 0 indexed
+   */
   lnum: number
   colStart: number
   colEnd: number
@@ -15,12 +18,12 @@ export interface TyposItem {
 }
 
 export function spawnCommand(cmd: string, args: string[], lines: ReadonlyArray<string>, token: CancellationToken, onLine: (line: string) => void): Promise<void> {
-  const cp = spawn(cmd, args, { cwd: process.cwd(), serialization: 'advanced' })
+  const cp = spawn(cmd, args, { cwd: process.cwd() })
   return new Promise((resolve, reject) => {
     let disposable = token.onCancellationRequested(() => {
-      // cp.kill(os.constants.signals.SIGKILL)
       disposable.dispose()
-      resolve(undefined)
+      reject(new Error('Cancelled'))
+      cp.kill()
     })
     cp.on('error', (err) => {
       reject(err)
@@ -37,7 +40,6 @@ export function spawnCommand(cmd: string, args: string[], lines: ReadonlyArray<s
     })
     for (let line of lines) {
       cp.stdin.write(line + '\n')
-      if (token.isCancellationRequested) break
     }
     cp.stdin.end()
     cp.stderr.on('data', data => {
