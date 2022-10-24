@@ -17,6 +17,9 @@ export type CheckIgnored = (word: string) => boolean
 
 export default class TyposBuffer implements BufferSyncItem {
   private tokenSource = new CancellationTokenSource()
+  /**
+   * typos for each line.
+   */
   private typos: ReadonlyArray<TyposItem>[] = []
   private mutex = new Mutex()
   constructor(
@@ -64,19 +67,19 @@ export default class TyposBuffer implements BufferSyncItem {
       this.addHighlights()
       return
     }
-    this.check(e)
+    void this.check(e)
   }
 
   public addHighlights(): void {
     let { nvim } = workspace
     let hlGroup = this.config.highlightGroup
     let items: ExtendedHighlightItem[] = []
-    for (let arr of this.typos) {
-      for (let o of arr) {
+    for (let i = 0; i < this.typos.length; i++) {
+      for (let o of this.typos[i]) {
         if (this.checkIgnored(o.word)) continue
         items.push({
           hlGroup,
-          lnum: o.lnum,
+          lnum: i,
           colEnd: o.colEnd,
           colStart: o.colStart,
           start_incl: false,
@@ -128,7 +131,6 @@ export default class TyposBuffer implements BufferSyncItem {
           let arr: ReadonlyArray<TyposItem>[] = []
           for (let i = 0; i < newLines.length; i++) {
             let items = typoList.filter(o => o.lnum === i)
-            items.forEach(o => o.lnum = o.lnum + sl)
             arr.push(items)
           }
           this.typos.splice(sl, del + 1, ...arr)
