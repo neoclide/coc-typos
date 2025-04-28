@@ -38,9 +38,17 @@ export function spawnCommand(cmd: string, args: string[], lines: ReadonlyArray<s
     rl.on('close', () => {
       resolve()
     })
-    for (let line of lines) {
-      cp.stdin.write(line + '\n')
-    }
+    cp.on('exit', code => {
+      if (code != 0) {
+        reject(new Error(`process exit with ${code}`))
+      }
+    })
+    cp.stdin.on('error', err => {
+      if (err['code'] !== 'EPIPE') {
+        reject(err)
+      }
+    })
+    cp.stdin.write(lines.join('\n') + '\n')
     cp.stdin.end()
     cp.stderr.on('data', data => {
       window.showErrorMessage(`"${cmd} ${args.join(' ')}" error: ${data.toString()}`)
